@@ -8,9 +8,9 @@ from urllib import quote
 from urllib2 import build_opener, Request
 from argparse import ArgumentParser
 from getpass import getpass
-from datetime import datetime 
+from datetime import datetime
 
-class M5350Control(object):
+Class M5350Control(object):
     """
     TP-Link M5350 connector class
     """
@@ -51,8 +51,7 @@ class M5350Control(object):
         headers = self.headers
         headers.append(('Referer', ''.join(['http://', self.host, path])))
         for (key, value) in headers:
-            request.add_header(key, value)
-        
+            request.add_header(key, value) 
         # Build cookie store
         cookies = []
         for (key, value) in self.cookies:
@@ -61,23 +60,23 @@ class M5350Control(object):
         opener.addheaders.append(('Cookie', '; '.join(cookies)))
 
         return opener.open(request)
-    
+
     def send_sms(self, telnr, text):
         """
         send a send_sms request
         """
-        
+
         if len(text) > 160:
-            print ''.join(['message too long (', str(len(text)), ')']) 
-    
+            print ''.join(['message too long (', str(len(text)), ')'])
+
         now = datetime.now()
-        timestring = ','.join([str(now.year), 
-                               str(now.month), 
-                               str(now.day), 
-                               str(now.hour), 
-                               str(now.minute), 
+        timestring = ','.join([str(now.year),
+                               str(now.month),
+                               str(now.day),
+                               str(now.hour),
+                               str(now.minute),
                                str(now.second)])
-        parameters = [('parent_path',''),
+        parameters = [('parent_path', ''),
                       ('sms_index', '0'),
                       ('numInputBoxId', telnr),
                       ('contentAreaId', text),
@@ -86,7 +85,6 @@ class M5350Control(object):
                       ('sentTime', timestring)]
 
         return self._send_request_('/userRpm/smsSingle.htm', parameters)
-
 
     def connect(self, connect=True):
         """
@@ -101,6 +99,7 @@ class M5350Control(object):
             btn_id = 'disConnBtnId'
 
         return self._send_request_('/userRpm/linkStatus.htm', [(btn_id, btn_value)])
+
 
 def main():
     """
@@ -120,7 +119,7 @@ def main():
         controller.connect(True)
     elif args.action[0].lower() == 'disconnect':
         controller.connect(False)
-    elif args.action[0].lower() == 'sms' :
+    elif args.action[0].lower() == 'sms':
         if len(args.action) != 3:
             print 'usage: tp-link sms <telnr> <message>'
         else:
